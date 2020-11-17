@@ -14,6 +14,19 @@ _launchURL(url) async {
   }
 }
 
+Future<void> _launchInBrowser(String url) async {
+  if (await canLaunch(url)) {
+    await launch(
+      url,
+      forceSafariVC: false,
+      forceWebView: false,
+      headers: <String, String>{'header_key': 'header_value'},
+    );
+  } else {
+    throw 'No se pudo abrir el link $url';
+  }
+}
+
 class HomeTabs extends StatefulWidget {
   int currentTabIndex = 0;
 
@@ -29,7 +42,7 @@ class _HomeTabsState extends State<HomeTabs>
     SystemChrome.setEnabledSystemUIOverlays([]);
   }
 
-  List<String> _urls = [
+  final List<String> _urls = [
     'https://yoestoyaqui.cl/aplicacion-movil',
     'https://yoestoyaqui.cl/categorias',
     'https://yoestoyaqui.cl/explorar',
@@ -89,6 +102,12 @@ class _HomeTabsState extends State<HomeTabs>
             } else if (request.url.contains("mailto:")) {
               _launchURL(request.url);
               return NavigationDecision.prevent;
+            } else if (request.url.contains("instagram.com")) {
+              _launchInBrowser(request.url);
+              return NavigationDecision.prevent;
+            } else if (request.url.contains("facebook.com")) {
+              _launchInBrowser(request.url);
+              return NavigationDecision.prevent;
             }
             return NavigationDecision.navigate;
           },
@@ -100,6 +119,14 @@ class _HomeTabsState extends State<HomeTabs>
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: widget.currentTabIndex,
+        onTap: (selectedIndex) {
+          _webController.loadUrl(_urls[selectedIndex]);
+
+          setState(() {
+            widget.currentTabIndex = selectedIndex;
+            print('$selectedIndex Selected!');
+          });
+        },
         items: [
           BottomNavigationBarItem(
               icon: Icon(Icons.home),
@@ -118,13 +145,6 @@ class _HomeTabsState extends State<HomeTabs>
               label: "Ofertas",
               backgroundColor: Colors.orangeAccent)
         ],
-        onTap: (selectedIndex) {
-          _webController.loadUrl(_urls[selectedIndex]);
-
-          setState(() {
-            widget.currentTabIndex = selectedIndex;
-          });
-        },
       ),
     );
   }
