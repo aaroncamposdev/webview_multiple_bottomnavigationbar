@@ -27,6 +27,7 @@ Future<void> _launchInBrowser(String url) async {
   }
 }
 
+// ignore: must_be_immutable
 class HomeTabs extends StatefulWidget {
   int currentTabIndex = 0;
 
@@ -51,8 +52,6 @@ class _HomeTabsState extends State<HomeTabs>
 
   WebViewController _webController;
 
-  final Completer<WebViewController> _controllerCompleter =
-      Completer<WebViewController>();
 
   Future<void> _onWillPop(BuildContext context) async {
     print("onwillpop");
@@ -84,6 +83,7 @@ class _HomeTabsState extends State<HomeTabs>
   }
 
   @override
+  // ignore: must_call_super
   Widget build(BuildContext context) {
     print('<----- build init ----->');
 

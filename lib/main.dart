@@ -55,14 +55,6 @@ OneSignal.shared.setEmailSubscriptionObserver((OSEmailSubscriptionStateChanges e
 // For each of the above functions, you can also pass in a 
 // reference to a function as well:
 
-void _handleNotificationReceived(OSNotification notification) {
-  
-}
-
-void main() {
-  OneSignal.shared.setNotificationReceivedHandler(_handleNotificationReceived);
-}
-
 //OneSignal
 }
 
